@@ -4,6 +4,8 @@
 
 #features
 -Header
+-login
+-signup
 
 -Main Movie
 -trailer in Bg - Title and Discription
