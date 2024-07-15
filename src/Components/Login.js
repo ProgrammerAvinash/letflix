@@ -41,6 +41,7 @@ function Login() {
           const errorCode = error.code;
           const errorMessage = error.message;
           console.log(errorCode + " - " + errorMessage);
+          setErrMessage(errorCode + " - " + errorMessage);
         });
     } else {
       //Sign in logic
@@ -59,6 +60,7 @@ function Login() {
           const errorCode = error.code;
           const errorMessage = error.message;
           console.log(errorCode + " - " + errorMessage, "errrr");
+          setErrMessage(errorCode + " - " + errorMessage);
         });
     }
   };
@@ -76,7 +78,7 @@ function Login() {
         onSubmit={(e) => e.preventDefault()}
         className="w-3/12 absolute my-40 p-10 mx-auto right-0 left-0 bg-black bg-opacity-80 text-white text-xs"
       >
-        <h1 className="m-2">{isSigninForm ? "Sign In" : "Sign Up"}</h1>
+        <h1 className="m-2 text-lg">{isSigninForm ? "Sign In" : "Sign Up"}</h1>
         {!isSigninForm ? (
           <input
             ref={name}
@@ -99,7 +101,12 @@ function Login() {
           placeholder="Password "
           className="p-2 m-2 text-xs  bg-gray-400 bg-opacity-50 w-full "
         />
-        <p className="text-red-600">{errmessage}</p>
+        <p className="text-red-600">
+          {errmessage ===
+          "auth/invalid-credential - Firebase: Error (auth/invalid-credential)."
+            ? "Invalid Credential"
+            : errmessage}
+        </p>
         <button
           className="p-2 m-2  w-full text-white bg-red-700 text-sm"
           onClick={handleButtonClick}
