@@ -1,7 +1,10 @@
 import React, { useRef, useState } from "react";
 import Header from "./Header";
 import { checkValidatedata } from "../utils/validate";
-import { createUserWithEmailAndPassword } from "firebase/auth";
+import {
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+} from "firebase/auth";
 import { auth } from "../utils/firebase";
 
 function Login() {
@@ -19,27 +22,46 @@ function Login() {
     const passwordData = password.current.value;
     const Message = checkValidatedata(emailData, passwordData);
     console.log(Message);
+    // console.log(isSigninForm, "isSignIn");
     setErrMessage(Message);
+    if (Message) return;
+
+    if (!isSigninForm) {
+      //Signup logic
+      createUserWithEmailAndPassword(
+        auth,
+        email.current.value,
+        password.current.value
+      )
+        .then((userCrediential) => {
+          const user = userCrediential.user;
+          console.log(user);
+        })
+        .catch((error) => {
+          const errorCode = error.code;
+          const errorMessage = error.message;
+          console.log(errorCode + " - " + errorMessage);
+        });
+    } else {
+      //Sign in logic
+
+      signInWithEmailAndPassword(
+        auth,
+        email.current.value,
+        password.current.value
+      )
+        .then((userCredential) => {
+          // Signed in
+          const user = userCredential.user;
+          console.log(user, "login user");
+        })
+        .catch((error) => {
+          const errorCode = error.code;
+          const errorMessage = error.message;
+          console.log(errorCode + " - " + errorMessage, "errrr");
+        });
+    }
   };
-
-  //Signup
-
-  if (!isSigninForm) {
-    createUserWithEmailAndPassword(
-      auth,
-      email.current.value,
-      password.current.value
-    )
-      .then((userCrediential) => {
-        const user = userCrediential.user;
-        console.log(user);
-      })
-      .catch((error) => {
-        const errorCode = error.code;
-        const errorMessage = error.message;
-        console.log(errorCode + " - " + errorMessage);
-      });
-  }
 
   return (
     <div>
